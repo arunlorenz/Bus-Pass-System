@@ -1,0 +1,156 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Pass System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /* background-color: #f4f4f4; */
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/background.png'); /* Replace 'background.jpg' with the path to your image */
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .radio-group input[type="radio"] {
+            display: inline-block;
+            vertical-align: center;
+        }
+
+        .radio-group label {
+            display: inline-block;
+            margin-right: 1px; /* Adjust spacing between radio button and label */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Karpagam Institute of Technology</h1>
+        <h2>Welcome to the Bus Pass System</h2>
+
+        <label for="roll_number">Enter Your Roll Number</label>
+        <input type="text" id="roll_number" placeholder="Example: 21eca12">
+        
+        <label for="selected_stop">Select Stop</label>
+        <select id="selected_stop">
+            <option value="Stop 1">Gandhipuram - Rs.50</option>
+            <option value="Stop 2">Tirupur - Rs.75</option>
+            <option value="Stop 3">Pollachi - Rs.100</option>
+        </select>
+
+        <label for="round_trip">Round Trip</label>
+        <div class="radio-group">
+            <input type="radio" id="round_trip_yes" name="round_trip" value="Yes">
+            <label for="round_trip_yes">Yes</label>
+            <input type="radio" id="round_trip_no" name="round_trip" value="No">
+            <label for="round_trip_no">No</label>
+        </div>
+
+
+        <button onclick="generateBusPass()">Generate Pass</button>
+        <div id="pass_message" class="message"></div>
+
+        <h2>Validate Bus Pass</h2>
+        <input type="text" id="pass_number_validate" placeholder="Enter pass number">
+        <button onclick="validateBusPass()">Validate Pass</button>
+        <div id="validation_message" class="message"></div>
+    </div>
+
+    <script>
+        function generateBusPass() {
+            const rollNumber = document.getElementById('roll_number').value;
+            const selectedStop = document.getElementById('selected_stop').value;
+            const roundTrip = document.querySelector('input[name="round_trip"]:checked').value;
+
+            fetch('/buy-bus-pass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ roll_number: rollNumber, selected_stop: selectedStop, round_trip: roundTrip })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('pass_message').innerText = data.message;
+                if (data.pass_number) {
+                    document.getElementById('pass_message').innerText += ' Your bus pass number is: ' + data.pass_number;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function validateBusPass() {
+            const passNumber = document.getElementById('pass_number_validate').value;
+
+            fetch('/validate-bus-pass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pass_number: passNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('validation_message').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
