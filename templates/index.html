@@ -1,156 +1,90 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bus Pass System</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
     <style>
         body {
             font-family: Arial, sans-serif;
-            /* background-color: #f4f4f4; */
             margin: 0;
             padding: 0;
-            background-image: url('/static/background.png'); /* Replace 'background.jpg' with the path to your image */
+            background-image: url('/static/background.png');
             background-size: cover;
             background-position: center;
+            height: 100vh;
+            position: relative;
         }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.909); /* Adjust opacity as needed */
             padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
         }
         h1 {
-            text-align: center;
             color: #333;
+            margin-top: 10px;
+        }
+        h3 {
+            color: #666;
+            margin-top: 10px;
         }
         h2 {
-            text-align: center;
             color: #333;
+            margin-top: 20px;
         }
-        label {
-            display: block;
-            margin-bottom: 10px;
+        .links {
+            margin-top: 30px;
         }
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
+        a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: 1px solid #007bff;
             border-radius: 5px;
-            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
+        a:hover {
             background-color: #007bff;
             color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
-        button:hover {
-            background-color: #0056b3;
+        .center-img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .message {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-        }
-        .radio-group input[type="radio"] {
-            display: inline-block;
-            vertical-align: center;
-        }
-
-        .radio-group label {
-            display: inline-block;
-            margin-right: 1px; /* Adjust spacing between radio button and label */
+        .kit {
+            position: fixed;
+            top: 6%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(249, 249, 249, 0.909); /* Adjust opacity as needed */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: start;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Karpagam Institute of Technology</h1>
-        <h2>Welcome to the Bus Pass System</h2>
-
-        <label for="roll_number">Enter Your Roll Number</label>
-        <input type="text" id="roll_number" placeholder="Example: 21eca12">
-        
-        <label for="selected_stop">Select Stop</label>
-        <select id="selected_stop">
-            <option value="Stop 1">Gandhipuram - Rs.50</option>
-            <option value="Stop 2">Tirupur - Rs.75</option>
-            <option value="Stop 3">Pollachi - Rs.100</option>
-        </select>
-
-        <label for="round_trip">Round Trip</label>
-        <div class="radio-group">
-            <input type="radio" id="round_trip_yes" name="round_trip" value="Yes">
-            <label for="round_trip_yes">Yes</label>
-            <input type="radio" id="round_trip_no" name="round_trip" value="No">
-            <label for="round_trip_no">No</label>
-        </div>
-
-
-        <button onclick="generateBusPass()">Generate Pass</button>
-        <div id="pass_message" class="message"></div>
-
-        <h2>Validate Bus Pass</h2>
-        <input type="text" id="pass_number_validate" placeholder="Enter pass number">
-        <button onclick="validateBusPass()">Validate Pass</button>
-        <div id="validation_message" class="message"></div>
+    <div class="kit">
+        <img src="/static/kit.png" alt="Centered Image" class="center-img">
     </div>
-
-    <script>
-        function generateBusPass() {
-            const rollNumber = document.getElementById('roll_number').value;
-            const selectedStop = document.getElementById('selected_stop').value;
-            const roundTrip = document.querySelector('input[name="round_trip"]:checked').value;
-
-            fetch('/buy-bus-pass', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ roll_number: rollNumber, selected_stop: selectedStop, round_trip: roundTrip })
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('pass_message').innerText = data.message;
-                if (data.pass_number) {
-                    document.getElementById('pass_message').innerText += ' Your bus pass number is: ' + data.pass_number;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-
-        function validateBusPass() {
-            const passNumber = document.getElementById('pass_number_validate').value;
-
-            fetch('/validate-bus-pass', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ pass_number: passNumber })
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('validation_message').innerText = data.message;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    </script>
+    <div class="overlay">
+        <div class="content">
+            <h1>Karpagam Institute of Technology</h1>
+            <h3>Coimbatore - 641 105</h3>
+            <h2>Department of Transportation</h2>
+            <div class="links">
+                <a href="/student_portal">Student Portal</a>
+                <a href="/bus_incharge_portal">Bus Incharge Portal</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

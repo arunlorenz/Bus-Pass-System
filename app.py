@@ -73,5 +73,13 @@ def validate_bus_pass():
     else:
         return jsonify({"valid": False, "message": "Invalid bus pass number"})
 
+@app.route('/student_portal')
+def student_portal():
+    return render_template('student_portal.html')
+
+@app.route('/bus_incharge_portal')
+def bus_incharge_portal():
+    return render_template('bus_incharge_portal.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
