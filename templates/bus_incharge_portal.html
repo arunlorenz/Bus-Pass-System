@@ -1,10 +1,9 @@
-<!-- bus_incharge_portal.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Incharge Portal</title>
+    <title>KIT - Transport</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.png">
     <style>
         body {
@@ -19,10 +18,14 @@
         .container {
             max-width: 800px;
             margin: 50px auto;
-            padding: 20px;
+            padding: 15px;
             background-color: #fff;
-            border-radius: 5px;
+            border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         h1 {
             text-align: center;
@@ -101,6 +104,18 @@
             border-radius: 10px;
             text-align: start;
         }
+        .shell {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: rgba(123, 121, 121, 0.164); /* Adjust opacity as needed */
+            border-radius: 10px;
+        }
+        /* New CSS for the "alpha" word */
+        .alpha {
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -111,17 +126,31 @@
         <a href="/">Home</a>
 
         <h1>Karpagam Institute of Technology</h1>
-        <h2>Welcome to the Bus Pass System</h2>
+        <h2>Bus Incharge Portal</h2>
 
         <h2>Validate Bus Pass</h2>
-        <input type="text" id="pass_number_validate" placeholder="Enter pass number">
-        <button onclick="validateBusPass()">Validate Pass</button>
-        <div id="validation_message" class="message"></div>
+        <form id="busPassValidationForm" onsubmit="return validateBusPass()">
+            <input type="text" id="pass_number_validate" placeholder="Enter pass number" required>
+            <button type="submit">Validate Pass</button>
+            <div id="validation_message" class="message"></div>
+        </form>
+    </div>
+    <div class="shell">
+        <span class="alpha">alpha</span>
     </div>
 
     <script>
         function validateBusPass() {
             const passNumber = document.getElementById('pass_number_validate').value;
+
+            if (!passNumber) {
+                // Display message if pass number is not entered
+                document.getElementById('validation_message').innerText = 'Please enter pass number.';
+                return false; // Prevent form submission
+            }
+
+            // Clear any previous message
+            document.getElementById('validation_message').innerText = '';
 
             fetch('/validate-bus-pass', {
                 method: 'POST',
@@ -137,6 +166,8 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+
+            return false; // Prevent form submission (handled by fetch)
         }
     </script>
 </body>

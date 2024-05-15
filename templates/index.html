@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Pass System</title>
+    <title>KIT - Transport</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.png">
     <style>
         body {
@@ -21,9 +21,19 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.909); /* Adjust opacity as needed */
+            background-color: rgba(255, 255, 255, 0.957); /* Adjust opacity as needed */
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .overlayy {
+            position: absolute;
+            top: 96%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(255, 255, 255); /* Adjust opacity as needed */
+            padding: 5px;
+            border-radius: 60px;
             text-align: center;
         }
         h1 {
@@ -69,6 +79,18 @@
             border-radius: 10px;
             text-align: start;
         }
+        .shell {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: rgba(123, 121, 121, 0.164); /* Adjust opacity as needed */
+            border-radius: 10px;
+        }
+        /* New CSS for the "alpha" word */
+        .alpha {
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -85,6 +107,14 @@
                 <a href="/bus_incharge_portal">Bus Incharge Portal</a>
             </div>
         </div>
+    </div>
+    <!--<div class="overlayy">
+        <footer>
+            <p>Developed & Maintained by Arun 💙</p>
+        </footer>
+    </div>-->
+    <div class="shell">
+        <span class="alpha">alpha</span>
     </div>
 </body>
 </html>
