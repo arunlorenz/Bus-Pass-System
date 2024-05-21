@@ -16,7 +16,7 @@ DB_NAME = os.getenv("MONGO_DB_NAME")
 # Connect to MongoDB
 client = MongoClient(DB_STRING)
 db = client[DB_NAME]
-collection = db["bus_passes"]
+collection = db["buspass"]
 
 # Dummy data for stop amounts (replace with actual data)
 stop_amounts = {

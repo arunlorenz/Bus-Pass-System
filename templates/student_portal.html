@@ -7,6 +7,7 @@
     <title>KIT - Transport</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.png">
     <style>
+        /* (Your existing CSS styles) */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -137,7 +138,7 @@
         <h1>Karpagam Institute of Technology</h1>
         <h2>Student Portal</h2>
         <h2>Generate Bus Pass</h2>
-        <form id="busPassForm" onsubmit="return validateForm()">
+        <form id="busPassForm" onsubmit="return generateBusPass(event)">
             <label for="roll_number">Enter Your Roll Number</label>
             <input type="text" id="roll_number" placeholder="Example: 21eca12" required>
             
@@ -165,24 +166,9 @@
     </div>
 
     <script>
-        function validateForm() {
-            const rollNumber = document.getElementById('roll_number').value;
-            const selectedStop = document.getElementById('selected_stop').value;
-            const roundTrip = document.querySelector('input[name="round_trip"]:checked');
+        function generateBusPass(event) {
+            event.preventDefault(); // Prevent the form from submitting the default way
 
-            if (!rollNumber || !selectedStop || !roundTrip) {
-                // Display message if any required field is empty
-                document.getElementById('pass_message').innerText = 'Please fill out all required fields.';
-                return false; // Prevent form submission
-            }
-
-            // Clear any previous message
-            document.getElementById('pass_message').innerText = '';
-
-            return true; // Allow form submission
-        }
-
-        function generateBusPass() {
             const rollNumber = document.getElementById('roll_number').value;
             const selectedStop = document.getElementById('selected_stop').value;
             const roundTrip = document.querySelector('input[name="round_trip"]:checked').value;
@@ -196,13 +182,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('pass_message').innerText = data.message;
+                const messageElement = document.getElementById('pass_message');
+                messageElement.innerText = data.message;
                 if (data.pass_number) {
-                    document.getElementById('pass_message').innerText += ' Your bus pass number is: ' + data.pass_number;
+                    messageElement.innerText += ' Your bus pass number is: ' + data.pass_number;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                document.getElementById('pass_message').innerText = 'An error occurred while generating the bus pass.';
             });
         }
     </script>
