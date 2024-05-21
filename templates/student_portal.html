@@ -51,12 +51,12 @@
         }
         button {
             display: block;
-            width: 100%;
+            width: 38%;
             padding: 10px;
             background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
         }
         button:hover {
@@ -113,9 +113,18 @@
             background-color: rgba(123, 121, 121, 0.164); /* Adjust opacity as needed */
             border-radius: 10px;
         }
-        /* New CSS for the "alpha" word */
         .alpha {
             color: green;
+        }
+        .home-link {
+            position: absolute;
+            top: 20px;
+            left: 0px;
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -123,8 +132,8 @@
     <div class="kit">
         <img src="/static/kit.png" alt="Centered Image" class="center-img">
     </div>
+    <a class="home-link" href="/">Home</a>
     <div class="container">
-        <a href="/">Home</a>
         <h1>Karpagam Institute of Technology</h1>
         <h2>Student Portal</h2>
         <h2>Generate Bus Pass</h2>
