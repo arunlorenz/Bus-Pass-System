@@ -16,7 +16,7 @@ DB_NAME = os.getenv("MONGO_DB_NAME")
 # Connect to MongoDB
 client = MongoClient(DB_STRING)
 db = client[DB_NAME]
-collection = db["bus_passes"]
+collection = db["buspass"]
 
 # Dummy data for stop amounts (replace with actual data)
 stop_amounts = {
@@ -80,6 +80,10 @@ def student_portal():
 @app.route('/bus_incharge_portal')
 def bus_incharge_portal():
     return render_template('bus_incharge_portal.html')
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

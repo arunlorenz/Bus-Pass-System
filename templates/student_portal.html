@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal</title>
+    <title>KIT - Transport</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.png">
     <style>
+        /* (Your existing CSS styles) */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -19,10 +20,14 @@
         .container {
             max-width: 800px;
             margin: 50px auto;
-            padding: 20px;
+            padding: 15px;
             background-color: #fff;
-            border-radius: 5px;
+            border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         h1 {
             text-align: center;
@@ -47,12 +52,12 @@
         }
         button {
             display: block;
-            width: 100%;
+            width: 38%;
             padding: 10px;
             background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
         }
         button:hover {
@@ -71,7 +76,7 @@
 
         .radio-group label {
             display: inline-block;
-            margin-right: 1px; /* Adjust spacing between radio button and label */
+            margin-right: 1px; 
         }
         a {
             text-decoration: none;
@@ -96,10 +101,31 @@
             top: 6%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(249, 249, 249, 0.909); /* Adjust opacity as needed */
+            background-color: rgba(249, 249, 249, 0.909); 
             padding: 20px;
             border-radius: 10px;
             text-align: start;
+        }
+        .shell {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: rgba(123, 121, 121, 0.164); /* Adjust opacity as needed */
+            border-radius: 10px;
+        }
+        .alpha {
+            color: green;
+        }
+        .home-link {
+            position: absolute;
+            top: 20px;
+            left: 0px;
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -107,34 +133,42 @@
     <div class="kit">
         <img src="/static/kit.png" alt="Centered Image" class="center-img">
     </div>
+    <a class="home-link" href="/">Home</a>
     <div class="container">
-        <a href="/">Home</a>
         <h1>Karpagam Institute of Technology</h1>
-        <h2>Welcome to the Bus Pass System</h2>
+        <h2>Student Portal</h2>
         <h2>Generate Bus Pass</h2>
-        <label for="roll_number">Enter Your Roll Number</label>
-        <input type="text" id="roll_number" placeholder="Example: 21eca12">
-        
-        <label for="selected_stop">Select Stop</label>
-        <select id="selected_stop">
-            <option value="Stop 1">Gandhipuram - Rs.50</option>
-            <option value="Stop 2">Tirupur - Rs.75</option>
-            <option value="Stop 3">Pollachi - Rs.100</option>
-        </select>
+        <form id="busPassForm" onsubmit="return generateBusPass(event)">
+            <label for="roll_number">Enter Your Roll Number</label>
+            <input type="text" id="roll_number" placeholder="Example: 21eca12" required>
+            
+            <label for="selected_stop">Select Stop</label>
+            <select id="selected_stop" required>
+                <option value="">Select a stop</option>
+                <option value="Stop 1">Gandhipuram - Rs.50</option>
+                <option value="Stop 2">Tirupur - Rs.75</option>
+                <option value="Stop 3">Pollachi - Rs.100</option>
+            </select>
 
-        <label for="round_trip">Round Trip</label>
-        <div class="radio-group">
-            <input type="radio" id="round_trip_yes" name="round_trip" value="Yes">
-            <label for="round_trip_yes">Yes</label>
-            <input type="radio" id="round_trip_no" name="round_trip" value="No">
-            <label for="round_trip_no">No</label>
-        </div>
-        <button onclick="generateBusPass()">Generate Pass</button>
-        <div id="pass_message" class="message"></div>
+            <label for="round_trip">Round Trip</label>
+            <div class="radio-group">
+                <input type="radio" id="round_trip_yes" name="round_trip" value="Yes" required>
+                <label for="round_trip_yes">Yes</label>
+                <input type="radio" id="round_trip_no" name="round_trip" value="No" required>
+                <label for="round_trip_no">No</label>
+            </div>
+            <button type="submit">Generate Pass</button>
+            <div id="pass_message" class="message"></div>
+        </form>
+    </div>
+    <div class="shell">
+        <span class="alpha">alpha</span>
     </div>
 
     <script>
-        function generateBusPass() {
+        function generateBusPass(event) {
+            event.preventDefault(); // Prevent the form from submitting the default way
+
             const rollNumber = document.getElementById('roll_number').value;
             const selectedStop = document.getElementById('selected_stop').value;
             const roundTrip = document.querySelector('input[name="round_trip"]:checked').value;
@@ -148,13 +182,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('pass_message').innerText = data.message;
+                const messageElement = document.getElementById('pass_message');
+                messageElement.innerText = data.message;
                 if (data.pass_number) {
-                    document.getElementById('pass_message').innerText += ' Your bus pass number is: ' + data.pass_number;
+                    messageElement.innerText += ' Your bus pass number is: ' + data.pass_number;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                document.getElementById('pass_message').innerText = 'An error occurred while generating the bus pass.';
             });
         }
     </script>
