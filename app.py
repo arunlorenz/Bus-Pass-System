@@ -43,12 +43,8 @@ def get_secret_hash(username):
 @app.route('/')
 def home():
     if 'username' in session:
-        if 'student' in session['username']:
-            return redirect(url_for('student_portal'))
-        else:
-            return redirect(url_for('bus_incharge_portal'))
+        return redirect(url_for('student_portal')) if session['role'] == 'student' else redirect(url_for('bus_incharge_portal'))
     return render_template('index.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -69,19 +65,72 @@ def login():
                 }
             )
             session['username'] = username
-            # Retrieve role from user attributes
             user_attributes = cognito.get_user(
                 AccessToken=response['AuthenticationResult']['AccessToken']
             )['UserAttributes']
-            role = next((attr['Value'] for attr in user_attributes if attr['Name'] == 'custom:role'), None)
-            if role == 'student':
-                return redirect(url_for('student_portal'))
-            elif role == 'bus_incharge':
-                return redirect(url_for('bus_incharge_portal'))
+            role = next((attr['Value'] for attr in user_attributes if attr['Name'] == 'nickname'), None)
+            session['role'] = role
+            if 'student' == role:
+                return render_template('student_portal.html', username=session['username'])
+            elif 'bus_incharge' == role:
+                return render_template('bus_incharge_portal.html')
+            else:
+                return redirect(url_for('home'))
         except ClientError as e:
             return render_template('login.html', error=e.response['Error']['Message'])
     return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('role', None)
+    return redirect(url_for('home'))
+
+@app.route('/student_portal')
+def student_portal():
+    if 'username' in session:
+        if session['role'] == 'student':
+            return render_template('student_portal.html', username=session['username'])
+        else:
+            return redirect(url_for('home'))
+    return redirect(url_for('login'))
+
+@app.route('/bus_incharge_portal')
+def bus_incharge_portal():
+    if 'username' in session:
+        if session['role'] == 'bus_incharge':
+            return render_template('bus_incharge_portal.html', username=session['username'])
+        else:
+            return redirect(url_for('home'))
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if 'username' in session:
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        full_name = request.form['full_name']
+        role = request.form['nickname']  # This should contain the role information
+        secret_hash = get_secret_hash(username)
+        try:
+            response = cognito.sign_up(
+                ClientId=CLIENT_ID,
+                Username=username,
+                Password=password,
+                SecretHash=secret_hash,
+                UserAttributes=[
+                    {'Name': 'email', 'Value': email},
+                    {'Name': 'name', 'Value': full_name},
+                    {'Name': 'nickname', 'Value': role}  # Use nickname attribute to store the role
+                ]
+            )
+            return redirect(url_for('confirm', username=username))
+        except ClientError as e:
+            return render_template('register.html', error=e.response['Error']['Message'])
+    return render_template('register.html')
 
 @app.route('/confirm', methods=['GET', 'POST'])
 def confirm():
@@ -104,29 +153,6 @@ def confirm():
         except ClientError as e:
             return render_template('confirm.html', username=username, error=e.response['Error']['Message'])
     return render_template('confirm.html', username=username)
-
-@app.route('/student_portal')
-def student_portal():
-    if 'username' in session:
-        if 'student' in session['username']:
-            return render_template('student_portal.html', username=session['username'])
-        else:
-            return redirect(url_for('home'))
-    return redirect(url_for('login'))
-
-@app.route('/bus_incharge_portal')
-def bus_incharge_portal():
-    if 'username' in session:
-        if 'student' not in session['username']:
-            return render_template('bus_incharge_portal.html', username=session['username'])
-        else:
-            return redirect(url_for('home'))
-    return redirect(url_for('login'))
-
-@app.route('/logout')
-def logout():
-    session.pop('username', None)
-    return redirect(url_for('home'))
 
 @app.route('/buy-bus-pass', methods=['POST'])
 def buy_bus_pass():
