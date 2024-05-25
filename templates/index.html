@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIT - Transport</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/background.png');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            position: relative;
+        }
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.957); /* Adjust opacity as needed */
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .overlayy {
+            position: absolute;
+            top: 96%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(255, 255, 255); /* Adjust opacity as needed */
+            padding: 5px;
+            border-radius: 60px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-top: 10px;
+        }
+        h3 {
+            color: #666;
+            margin-top: 10px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 20px;
+        }
+        .links {
+            margin-top: 30px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .center-img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .kit {
+            position: fixed;
+            top: 6%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(249, 249, 249, 0.909); /* Adjust opacity as needed */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: start;
+        }
+        .shell {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: rgba(123, 121, 121, 0.164); /* Adjust opacity as needed */
+            border-radius: 10px;
+        }
+        .alpha {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="kit">
+        <img src="/static/kit.png" alt="Centered Image" class="center-img">
+    </div>
+    <div class="overlay">
+        <div class="content">
+            <h1>Karpagam Institute of Technology</h1>
+            <h3>Coimbatore - 641 105</h3>
+            <h2>Department of Transportation</h2>
+            <div class="links">
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            </div>
+        </div>
+    </div>
+    <!--<div class="overlayy">
+        <footer>
+            <p>Developed & Maintained by Arun 💙</p>
+        </footer>
+    </div>-->
+    <div class="shell">
+        <span class="alpha">alpha</span>
+    </div>
+</body>
+</html>

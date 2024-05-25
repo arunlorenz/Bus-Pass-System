@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIT - Transport</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/background.png');
+            background-size: cover;
+            background-position: center;
+            height: 100vh; 
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 38%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .radio-group input[type="radio"] {
+            display: inline-block;
+            vertical-align: center;
+        }
+
+        .radio-group label {
+            display: inline-block;
+            margin-right: 1px; 
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .center-img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .kit {
+            position: fixed;
+            top: 6%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(249, 249, 249, 0.909); 
+            padding: 20px;
+            border-radius: 10px;
+            text-align: start;
+        }
+        .shell {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: rgba(123, 121, 121, 0.164); /* Adjust opacity as needed */
+            border-radius: 10px;
+        }
+        .alpha {
+            color: green;
+        }
+        .home-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="kit">
+        <img src="/static/kit.png" alt="Centered Image" class="center-img">
+    </div>
+    <a class="home-link" href="/logout">Logout</a>
+    <div class="container">
+        <h1>Karpagam Institute of Technology</h1>
+        <h2>Bus Incharge Portal</h2>
+        <h2>Validate Bus Pass</h2>
+        <form id="busPassValidationForm" onsubmit="return validateBusPass()">
+            <input type="text" id="pass_number_validate" placeholder="Enter pass number" required>
+            <button type="submit">Validate Pass</button>
+            <div id="validation_message" class="message"></div>
+        </form>
+    </div>
+    <div class="shell">
+        <span class="alpha">alpha</span>
+    </div>
+
+    <script>
+        function validateBusPass() {
+            const passNumber = document.getElementById('pass_number_validate').value;
+
+            if (!passNumber) {
+                // Display message if pass number is not entered
+                document.getElementById('validation_message').innerText = 'Please enter pass number.';
+                return false; // Prevent form submission
+            }
+
+            // Clear any previous message
+            document.getElementById('validation_message').innerText = '';
+
+            fetch('/validate-bus-pass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pass_number: passNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('validation_message').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            return false; // Prevent form submission (handled by fetch)
+        }
+    </script>
+</body>
+</html>
