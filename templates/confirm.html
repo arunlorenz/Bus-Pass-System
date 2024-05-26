@@ -90,28 +90,36 @@
         .alpha {
             color: green;
         }
+        .home-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="kit">
         <img src="/static/kit.png" alt="Centered Image" class="center-img">
     </div>
+    <a class="home-link" href="/">Home</a>
     <div class="overlay">
         <div class="content">
-            <h1>Karpagam Institute of Technology</h1>
-            <h3>Coimbatore - 641 105</h3>
-            <h2>Department of Transportation</h2>
-            <div class="links">
-                <a href="/login">Login</a>
-                <a href="/register">Register</a>
-            </div>
+            <h1>Confirm Registration</h1>
+            <form action="/confirm?username={{ username }}" method="post">
+                <label for="confirmation_code">Confirmation Code:</label>
+                <input type="text" id="confirmation_code" name="confirmation_code" required><br>
+                <input type="submit" value="Confirm">
+            </form>
         </div>
     </div>
-    <!--<div class="overlayy">
-        <footer>
-            <p>Developed & Maintained by Arun 💙</p>
-        </footer>
-    </div>-->
+    {% if error %}
+    <p>{{ error }}</p>
+    {% endif %}
     <div class="shell">
         <span class="alpha">alpha</span>
     </div>
