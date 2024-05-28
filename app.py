@@ -170,9 +170,29 @@ def validate_bus_pass():
     pass_number = data.get('pass_number')
     bus_pass = collection.find_one({"pass_number": pass_number})
     if bus_pass:
-        return jsonify({"valid": True, "message": "Valid bus pass"})
+        # Check if the bus pass is already claimed
+        if bus_pass.get("claimed", False):
+            return jsonify({"valid": False, "message": "Bus pass already claimed"})
+        else:
+            return jsonify({"valid": True, "message": "Valid bus pass"})
     else:
         return jsonify({"valid": False, "message": "Invalid bus pass number"})
+
+@app.route('/claim-bus-pass', methods=['POST'])
+def claim_bus_pass():
+    data = request.json
+    pass_number = data.get('pass_number')
+    bus_pass = collection.find_one({"pass_number": pass_number})
+    if bus_pass:
+        # Check if the bus pass is already claimed
+        if bus_pass.get("claimed", False):
+            return jsonify({"success": False, "message": "Bus pass already claimed"})
+        else:
+            # Mark the bus pass as claimed
+            collection.update_one({"pass_number": pass_number}, {"$set": {"claimed": True}})
+            return jsonify({"success": True, "message": "Bus pass claimed successfully"})
+    else:
+        return jsonify({"success": False, "message": "Invalid bus pass number"})
 
 @app.errorhandler(404)
 def page_not_found(error):

@@ -125,9 +125,20 @@
             border: 1px solid #007bff;
             border-radius: 5px;
         }
+        .button-container {
+            display: flex; /* Use flexbox */
+            justify-content: space-between; /* Align buttons at the ends */
+        }
+
+        /* CSS for individual buttons */
+        .button-container button {
+            flex: 1; /* Make buttons flexible */
+            margin: 0 5px; /* Add some spacing between buttons */
+        }
     </style>
 </head>
 <body>
+    <!-- Your HTML body content -->
     <div class="kit">
         <img src="/static/kit.png" alt="Centered Image" class="center-img">
     </div>
@@ -135,29 +146,37 @@
     <div class="container">
         <h1>Karpagam Institute of Technology</h1>
         <h2>Bus Incharge Portal</h2>
-        <h2>Validate Bus Pass</h2>
-        <form id="busPassValidationForm" onsubmit="return validateBusPass()">
-            <input type="text" id="pass_number_validate" placeholder="Enter pass number" required>
-            <button type="submit">Validate Pass</button>
-            <div id="validation_message" class="message"></div>
+        <h2>Validate and Claim Bus Pass</h2>
+        <!-- Validation and Claim buttons -->
+        <form id="busPassValidationForm" onsubmit="return validateAndClaimBusPass()">
+            <!-- Input field for pass number -->
+            <input type="text" id="pass_number" placeholder="Enter pass number" required>
+            <!-- Button container -->
+            <div class="button-container">
+                <!-- Validate button -->
+                <button type="submit">Validate Pass</button>
+                <!-- Claim button -->
+                <button type="button" onclick="claimBusPass()">Claim Pass</button>
+            </div>
+            <!-- Display messages -->
+            <div id="message" class="message"></div>
         </form>
     </div>
-    <div class="shell">
-        <span class="alpha">alpha</span>
-    </div>
 
+    <!-- Your JavaScript code -->
     <script>
-        function validateBusPass() {
-            const passNumber = document.getElementById('pass_number_validate').value;
+        // JavaScript function to validate and claim bus pass
+        function validateAndClaimBusPass() {
+            const passNumber = document.getElementById('pass_number').value;
 
             if (!passNumber) {
                 // Display message if pass number is not entered
-                document.getElementById('validation_message').innerText = 'Please enter pass number.';
+                document.getElementById('message').innerText = 'Please enter pass number.';
                 return false; // Prevent form submission
             }
 
             // Clear any previous message
-            document.getElementById('validation_message').innerText = '';
+            document.getElementById('message').innerText = '';
 
             fetch('/validate-bus-pass', {
                 method: 'POST',
@@ -168,13 +187,48 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('validation_message').innerText = data.message;
+                if (data.valid) {
+                    document.getElementById('message').innerText = 'Valid bus pass';
+                } else {
+                    document.getElementById('message').innerText = 'Invalid bus pass';
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
 
             return false; // Prevent form submission (handled by fetch)
+        }
+
+        // JavaScript function to claim bus pass
+        function claimBusPass() {
+            const passNumber = document.getElementById('pass_number').value;
+
+            if (!passNumber) {
+                // Display message if pass number is not entered
+                document.getElementById('message').innerText = 'Please enter pass number.';
+                return; // Exit the function
+            }
+
+            fetch('/claim-bus-pass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pass_number: passNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('message').innerText = 'Bus pass claimed successfully';
+                    location.reload(); // Reload the page to update the list of bus passes
+                } else {
+                    document.getElementById('message').innerText = 'Error claiming bus pass: ' + data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
     </script>
 </body>
