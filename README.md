@@ -1,6 +1,6 @@
 # Bus Pass System
 
-This is a simple web application for managing bus passes for students.
+The Bus Pass System is an innovative web application revolutionizing the way students manage their bus passes. With a user-friendly interface, it offers convenient features such as generating and validating bus passes online. By leveraging HTML, CSS, JavaScript, Python, Flask, MongoDB and several AWS services, it ensures a seamless experience for users while maintaining robust backend functionality. This project aims to streamline bus pass management processes, reducing manual efforts and enhancing overall efficiency. With its cloud-based database storage, it guarantees scalability and reliability, making it an ideal solution for educational institutions seeking modernized bus pass management systems.
 
 ## Features
 
