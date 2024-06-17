@@ -159,12 +159,15 @@
             </div>
             <button type="submit">Generate Pass</button>
             <div id="pass_message" class="message"></div>
+            <!-- Display pass details here -->
+            <div id="pass_details" class="message"></div>
         </form>
     </div>
     <div class="shell">
         <span class="alpha">alpha</span>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    
     <script>
         function generateBusPass(event) {
             event.preventDefault(); // Prevent the form from submitting the default way
@@ -184,14 +187,35 @@
             .then(data => {
                 const messageElement = document.getElementById('pass_message');
                 messageElement.innerText = data.message;
-                if (data.pass_number) {
-                    messageElement.innerText += ' Your bus pass number is: ' + data.pass_number;
+                if (data.success) {
+                    // Display the details of the generated bus pass on the screen
+                    const passDetails = data.pass_details;
+                    const passDetailsElement = document.getElementById('pass_details');
+                    passDetailsElement.innerHTML = `
+                        <p>Pass Number: ${passDetails.pass_number}</p>
+                        <p>Amount: ${passDetails.amount}</p>
+                        <p>Selected Stop: ${passDetails.selected_stop}</p>
+                        <p>Round Trip: ${passDetails.round_trip}</p>
+                        <button onclick="downloadPass()">Download Pass</button>
+                    `;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 document.getElementById('pass_message').innerText = 'An error occurred while generating the bus pass.';
             });
+        }
+        function downloadPass() {
+            // Example: Generate a text file with pass details
+            const passDetails = document.getElementById('pass_details').innerText;
+            const blob = new Blob([passDetails], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bus_pass_details.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
     </script>
 </body>

@@ -162,7 +162,20 @@ def buy_bus_pass():
     round_trip = data.get('round_trip', 'No')
     pass_number, amount = generate_bus_pass(roll_number, selected_stop, round_trip)
     collection.insert_one({"roll_number": roll_number, "pass_number": pass_number, "total_amount": amount})
-    return jsonify({"message": "Bus pass generated successfully", "pass_number": pass_number, "amount": amount})
+    # Return pass details along with the success message
+    pass_details = {
+        "pass_number": pass_number,
+        "amount": amount,
+        "selected_stop": selected_stop,
+        "round_trip": round_trip
+    }
+    return jsonify({
+        "success": True,
+        "message": "Bus pass generated successfully",
+        "pass_details": pass_details
+    })
+
+
 
 @app.route('/validate-bus-pass', methods=['POST'])
 def validate_bus_pass():
