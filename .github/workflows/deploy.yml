@@ -1,0 +1,39 @@
+name: Deploy the app
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Update package list and install necessary packages
+      run: |
+        sudo apt-get update
+        sudo apt-get upgrade -y
+        sudo apt-get install -y python3-venv python3-pip
+
+    - name: Set up Python environment
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+
+    - name: Install requirements
+      run: |
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Start the code
+      run: |
+        source venv/bin/activate
+        python app.py
+
+    - name: Keep the job running for testing
+      run: sleep 1h
